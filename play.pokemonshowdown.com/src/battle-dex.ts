@@ -216,9 +216,7 @@ const Dex = new class implements ModdedDex {
 		}
 		if (avatar.includes('.') && window.Config?.server?.registered) {
 			// custom avatar served by the server
-			let protocol = (Config.server.port === 443) ? 'https' : 'http';
-			return protocol + '://' + Config.server.host + ':' + Config.server.port +
-				'/avatars/' + encodeURIComponent(avatar).replace(/\%3F/g, '?');
+			return 'https://sim.pokemonnext.net/avatars' + encodeURIComponent(avatar).replace(/\%3F/g, '?');
 		}
 		return Dex.resourcePrefix + 'sprites/trainers/' + Dex.sanitizeName(avatar || 'unknown') + '.png';
 	}
@@ -539,6 +537,14 @@ const Dex = new class implements ModdedDex {
 		//     This defaults to graphicsGen, but if the graphicsGen doesn't have a sprite for the Pokemon
 		//     (eg. Darmanitan in graphicsGen 2) then we go up gens until it exists.
 		//
+
+		if (species.tags.includes('Fakemon')) {
+			spriteData.url = `https://play.pokemonshowdown.net/sprites/fakemons/${spriteData.shiny ? 'shiny-' : ''}${spriteData.isFrontSprite ? 'front' : 'back'}-sprites/${species.id}.png`;
+			spriteData.pixelated = true;
+			spriteData.gen = 5;
+			return spriteData;
+		}
+
 		let graphicsGen = mechanicsGen;
 		if (Dex.prefs('nopastgens')) graphicsGen = 6;
 		if (Dex.prefs('bwgfx') && graphicsGen >= 6) graphicsGen = 5;
@@ -727,10 +733,15 @@ const Dex = new class implements ModdedDex {
 			id = toID(pokemon.volatiles.formechange[1]);
 		}
 		let num = this.getPokemonIconNum(id, pokemon?.gender === 'F', facingLeft);
-
+		let species = Dex.species.get(id);
 		let top = Math.floor(num / 12) * 30;
 		let left = (num % 12) * 40;
 		let fainted = ((pokemon as Pokemon | ServerPokemon)?.fainted ? `;opacity:.3;filter:grayscale(100%) brightness(.5)` : ``);
+		if (species.tags.includes('Fakemon')) {
+			return `background:transparent url(http://play.pokemonnext.net/sprites/fakemons/front-sprites/${id}.png) no-repeat scroll;background-size:contain;width:40px;background-position:center${fainted}`
+		}
+
+
 		return `background:transparent url(${Dex.resourcePrefix}sprites/pokemonicons-sheet.png?v16) no-repeat scroll -${left}px -${top}px${fainted}`;
 	}
 
@@ -794,6 +805,12 @@ const Dex = new class implements ModdedDex {
 		if (!pokemon) return '';
 		const data = this.getTeambuilderSpriteData(pokemon, gen);
 		const shiny = (data.shiny ? '-shiny' : '');
+
+		if (Dex.species.get(pokemon.species).tags.includes("Fakemon")) {
+			let url = `https://play.pokemonnext.net/sprites/fakemons/${data.shiny ? 'shiny-' : ''}front/${toID(pokemon.species)}.png`;
+			return 'background-image:url(' + url + ');background-position:' + data.x + 'px ' + data.y + 'px;background-repeat:no-repeat;background-size:100px;';
+		}
+
 		return 'background-image:url(' + Dex.resourcePrefix + data.spriteDir + shiny + '/' + data.spriteid + '.png);background-position:' + data.x + 'px ' + data.y + 'px;background-repeat:no-repeat';
 	}
 
