@@ -17,12 +17,21 @@ if (!fs.existsSync('caches/pokemon-showdown')) {
 process.stdout.write("Syncing data from Git repository... ");
 child_process.execSync('git pull', {cwd: 'caches/pokemon-showdown'});
 child_process.execSync('npm run build', {cwd: 'caches/pokemon-showdown'});
-console.log("DONE");
+
+if (!fs.existsSync('play.pokemonshowdown.com/sprites/fakemons')) {
+	child_process.execSync('git clone https://github.com/PokemonNext/fakemon-sprites.git fakemons', {
+		cwd: 'play.pokemonshowdown.com/sprites',
+	});
+}
+
+process.stdout.write("Syncing Fakemon sprites from github repository...\n");
+child_process.execSync('git pull', {cwd: 'play.pokemonshowdown.com/sprites/fakemons'});
 
 const Dex = require('../caches/pokemon-showdown/dist/sim/dex').Dex;
 const toID = Dex.toID;
 process.stdout.write("Loading gen 6 data... ");
 Dex.includeData();
+
 console.log("DONE");
 
 function es3stringify(obj) {
