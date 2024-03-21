@@ -1254,6 +1254,7 @@
 			var isLetsGo = this.curTeam.format.includes('letsgo');
 			var isBDSP = this.curTeam.format.includes('bdsp');
 			var isNatDex = this.curTeam.format.includes('nationaldex') || this.curTeam.format.includes('natdex');
+			console.log(this.curTeam.format);
 			var isPN = this.curTeam.format.includes('pokemonnext');
 			var buf = '<li value="' + i + '">';
 			if (!set.species) {
