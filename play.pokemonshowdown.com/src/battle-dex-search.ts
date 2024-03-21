@@ -626,19 +626,20 @@ abstract class BattleTypedSearch<T extends SearchType> {
 				if (!format) format = 'ou' as ID;
 			}
 		}
+		// pokemonnext = 11
 		if (format.includes('pokemonnext')) {
 			if (format.includes("doubles")) {
-				format = format.slice(10) as ID;
+				format = format.slice(18) as ID;
 				if (!format) format = 'ou' as ID;
 				this.formatType = 'pokemonnext';
 				this.dex = Dex.mod('gen9pokemonnext' as ID);
 			} else if (format.includes('freeforall')) {
-				format = format.slice(13) as ID;
+				format = format.slice(21) as ID;
 				if (!format) format = 'ou' as ID;
 				this.formatType = 'pokemonnext';
 				this.dex = Dex.mod('gen9pokemonnext' as ID);
 			} else {
-				format = format.slice(11) as ID;
+				format = format.slice(22) as ID;
 				if (!format) format = 'ou' as ID;
 				this.formatType = 'pokemonnext';
 				this.dex = Dex.mod('gen9pokemonnext' as ID);
