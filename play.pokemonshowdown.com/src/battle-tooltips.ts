@@ -2197,6 +2197,12 @@ class BattleTooltips {
 		const abilityData: {ability: string, baseAbility: string, possibilities: string[]} = {
 			ability: '', baseAbility: '', possibilities: [],
 		};
+		let abilityDex;
+		if (this.battle.id.includes('gen9pokemonnext')) {
+			abilityDex = Dex.mod('gen9pokemonnext' as ID);
+		} else {
+			abilityDex = this.battle.dex;
+		}
 		if (clientPokemon) {
 			if (clientPokemon.ability) {
 				abilityData.ability = clientPokemon.ability || clientPokemon.baseAbility;
@@ -2205,7 +2211,7 @@ class BattleTooltips {
 				}
 			} else {
 				const speciesForme = clientPokemon.getSpeciesForme() || serverPokemon?.speciesForme || '';
-				const species = this.battle.dex.species.get(speciesForme);
+				const species = abilityDex.species.get(speciesForme);
 				if (species.exists && species.abilities) {
 					abilityData.possibilities = [species.abilities['0']];
 					if (species.abilities['1']) abilityData.possibilities.push(species.abilities['1']);

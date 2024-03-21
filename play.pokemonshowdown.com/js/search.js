@@ -345,6 +345,9 @@
 		// abilities
 		if (gen >= 3) {
 			var abilities = Dex.forGen(gen).species.get(id).abilities;
+			if (this.engine.dex.modid === 'gen9pokemonnext') {
+				abilities = Dex.mod('gen9pokemonnext').species.get(id).abilities;
+			}
 			if (gen >= 5) {
 				if (abilities['1']) {
 					buf += '<span class="col twoabilitycol">' + abilities['0'] + '<br />' +
