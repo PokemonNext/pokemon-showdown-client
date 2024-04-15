@@ -582,10 +582,9 @@ abstract class BattleTypedSearch<T extends SearchType> {
 		}
 
 		if (format.includes('pokemonnext')) {
-			this.formatType = 'natdex';
+			this.formatType = 'pokemonnext';
 			if (format.endsWith('ou')) format = 'ou' as ID;
 			else format = 'ubers' as ID;
-			this.dex = Dex.mod('gen9pokemonnext' as ID);
 		}
 
 		if (format.startsWith('dlc1') && this.dex.gen === 8) {
@@ -628,7 +627,6 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			}
 			if (format.startsWith('pokemonnext')) {
 				format = format.slice('pokemonnext'.length) as ID;
-				this.dex = Dex.mod('gen9pokemonnext' as ID);
 			}
 			this.formatType = 'natdex';
 			if (!format) format = 'ou' as ID;
