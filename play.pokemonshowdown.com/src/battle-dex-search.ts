@@ -964,7 +964,7 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 		} else if (this.formatType === 'natdex') {
 			table = table['gen' + dex.gen + 'natdex'];
 		} else if (this.formatType === 'pokemonnext') {
-			table = table[this.dex.modid];
+			table = table['gen9pokemonnext'];
 		} else if (this.formatType === 'metronome') {
 			table = table['gen' + dex.gen + 'metronome'];
 		} else if (this.formatType === 'nfe') {
