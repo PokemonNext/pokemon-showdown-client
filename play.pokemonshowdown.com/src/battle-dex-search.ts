@@ -574,7 +574,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 
 		this.baseResults = null;
 		this.baseIllegalResults = null;
-		const formatName = format;
+		let formatName = format;
 		if (format.slice(0, 3) === 'gen') {
 			const gen = (Number(format.charAt(3)) || 6);
 			format = (format.slice(4) || 'customgame') as ID;
@@ -582,7 +582,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 		} else if (!format) {
 			this.dex = Dex;
 		}
-
+		formatName = formatName.replace("ou", "") as ID;
 		if (formatName in window.Formats) {
 			let info = window.Formats[formatName];
 			if ('mod' in info) {
