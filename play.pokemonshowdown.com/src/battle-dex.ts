@@ -808,7 +808,7 @@ const Dex = new class implements ModdedDex {
 		const shiny = (data.shiny ? '-shiny' : '');
 
 		if (Dex.species.get(pokemon.species).tags.includes("Fakemon")) {
-			let url = `https://play.pokemonnext.net/sprites/fakemons/${data.shiny ? 'shiny-' : ''}front/${toID(pokemon.species)}.png`;
+			let url = `https://play.pokemonnext.net/sprites/fakemons/${data.shiny ? 'shiny-' : ''}front-sprites/${toID(pokemon.species)}.png`;
 			return 'background-image:url(' + url + ');background-position:' + data.x + 'px ' + data.y + 'px;background-repeat:no-repeat;background-size:100px;';
 		}
 
