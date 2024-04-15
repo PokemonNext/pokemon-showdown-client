@@ -539,7 +539,7 @@ const Dex = new class implements ModdedDex {
 		//
 
 		if (species.tags.includes('Fakemon')) {
-			spriteData.url = `https://play.pokemonshowdown.net/sprites/fakemons/${spriteData.shiny ? 'shiny-' : ''}${spriteData.isFrontSprite ? 'front' : 'back'}-sprites/${species.id}.png`;
+			spriteData.url = `https://play.pokemonnext.net/sprites/fakemons/${spriteData.shiny ? 'shiny-' : ''}${spriteData.isFrontSprite ? 'front' : 'back'}-sprites/${species.id}.png`;
 			spriteData.pixelated = true;
 			spriteData.gen = 5;
 			return spriteData;
