@@ -583,6 +583,8 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			this.dex = Dex;
 		}
 		formatName = formatName.replace("ou", "") as ID;
+		console.log(window.Formats);
+		console.log(window);
 		if (formatName in window.Formats) {
 			let info = window.Formats[formatName];
 			if ('mod' in info) {
