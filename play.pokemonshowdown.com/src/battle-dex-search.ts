@@ -552,6 +552,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 	protected formatType: 'doubles' | 'bdsp' | 'bdspdoubles' | 'letsgo' | 'metronome' | 'natdex' | 'nfe' |
 	'ssdlc1' | 'ssdlc1doubles' | 'predlc' | 'predlcdoubles' | 'predlcnatdex' | 'svdlc1' | 'svdlc1doubles' |
 	'svdlc1natdex' | 'stadium' | 'lc' | 'pokemonnext' | null = null;
+	table: string | null = null;
 
 	/**
 	 * Cached copy of what the results list would be with only base filters
@@ -582,12 +583,33 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			this.dex = Dex;
 		}
 
-		if (format.includes('pokemonnext')) {
-			this.formatType = 'natdex';
-			if (format.endsWith('ou')) format = 'ou' as ID;
-			else format = 'ubers' as ID;
-			this.dex = Dex.mod('gen9pokemonnext' as ID);
+		if (formatName in window.Formats) {
+			let info = window.Formats[formatName];
+			if ('mod' in info) {
+				this.dex = Dex.mod(info.mod);
+				if (info.mod.includes('pokemonnext')) {
+					this.formatType = 'natdex';
+					if (info.gameType === 'doubles') {
+						format = 'doublesubers' as ID;
+						if (info.banlist.includes('DUber')) format = 'doublesou' as ID;
+						this.table = info.mod + (info.mod.includes('pokemonnext') && info.ruleTable.includes('standardnatdex') ? 'natdex' : '') + 'doubles';
+					} else {
+						format = 'ag' as ID;
+						if (info.banlist.includes('ND AG') || info.banlist.includes('AG')) format = 'ubers' as ID;
+						if (info.banlist.includes('ND Uber') || info.banlist.includes('Uber')) format = 'ou' as ID;
+						if (info.banlist.includes('ND OU') || info.banlist.includes('OU')) format = 'uu' as ID;
+						if (info.ruleset.includes('Little Cup')) format = 'lc' as ID;
+						this.table = info.mod + (info.mod.includes('pokemonnext') && info.ruleTable.includes('standardnatdex') ? 'natdex' : '');
+					}
+				}
+			}
 		}
+		// if (format.includes('pokemonnext')) {
+		// 	this.formatType = 'natdex';
+		// 	if (format.endsWith('ou')) format = 'ou' as ID;
+		// 	else format = 'ubers' as ID;
+		// 	this.dex = Dex.mod('gen9pokemonnext' as ID);
+		// }
 
 		if (format.startsWith('dlc1') && this.dex.gen === 8) {
 			if (format.includes('doubles')) {
@@ -850,7 +872,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			this.formatType === 'svdlc1' ? 'gen9dlc1' :
 			this.formatType === 'svdlc1doubles' ? 'gen9dlc1doubles' :
 			this.formatType === 'svdlc1natdex' ? 'gen9dlc1natdex' :
-			this.dex.modid.includes('pokemonnext') ? this.dex.modid :
+			this.table ? this.table :
 			this.formatType === 'natdex' ? `gen${gen}natdex` :
 			this.formatType === 'stadium' ? `gen${gen}stadium${gen > 1 ? gen : ''}` :
 			`gen${gen}`;
@@ -966,8 +988,8 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 			table = table['gen7letsgo'];
 		} else if (this.formatType === 'natdex') {
 			table = table['gen' + dex.gen + 'natdex'];
-		} else if (this.dex.modid.includes('pokemonnext')) {
-			table = table[this.dex.modid];
+		} else if (this.table) {
+			table = table[this.table];
 		} else if (this.formatType === 'metronome') {
 			table = table['gen' + dex.gen + 'metronome'];
 		} else if (this.formatType === 'nfe') {
@@ -1241,8 +1263,8 @@ class BattleItemSearch extends BattleTypedSearch<'item'> {
 		let table = BattleTeambuilderTable;
 		if (this.formatType?.startsWith('bdsp')) {
 			table = table['gen8bdsp'];
-		} else if (this.dex.modid.includes('pokemonnext')) {
-			table = table[this.dex.modid];
+		} else if (this.table) {
+			table = table[this.table.includes('doubles') ? this.table.replace('doubles' , '') : this.table];
 		} else if (this.formatType === 'natdex') {
 			table = table['gen' + this.dex.gen + 'natdex'];
 		} else if (this.formatType === 'metronome') {
