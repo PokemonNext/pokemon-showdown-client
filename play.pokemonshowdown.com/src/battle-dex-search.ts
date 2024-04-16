@@ -573,7 +573,6 @@ abstract class BattleTypedSearch<T extends SearchType> {
 
 		this.baseResults = null;
 		this.baseIllegalResults = null;
-		const formatName = format;
 		if (format.slice(0, 3) === 'gen') {
 			const gen = (Number(format.charAt(3)) || 6);
 			format = (format.slice(4) || 'customgame') as ID;
@@ -583,10 +582,9 @@ abstract class BattleTypedSearch<T extends SearchType> {
 		}
 
 		if (format.includes('pokemonnext')) {
-			this.formatType = 'natdex';
+			this.formatType = 'pokemonnext';
 			if (format.endsWith('ou')) format = 'ou' as ID;
 			else format = 'ubers' as ID;
-			this.dex = Dex.mod('gen9pokemonnext' as ID);
 		}
 
 		if (format.startsWith('dlc1') && this.dex.gen === 8) {
@@ -629,7 +627,6 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			}
 			if (format.startsWith('pokemonnext')) {
 				format = format.slice('pokemonnext'.length) as ID;
-				this.dex = Dex.mod('gen9pokemonnext' as ID);
 			}
 			this.formatType = 'natdex';
 			if (!format) format = 'ou' as ID;
@@ -850,7 +847,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			this.formatType === 'svdlc1' ? 'gen9dlc1' :
 			this.formatType === 'svdlc1doubles' ? 'gen9dlc1doubles' :
 			this.formatType === 'svdlc1natdex' ? 'gen9dlc1natdex' :
-			this.dex.modid.includes('pokemonnext') ? this.dex.modid :
+			this.formatType === 'pokemonnext' ? 'gen9pokemonnext' :
 			this.formatType === 'natdex' ? `gen${gen}natdex` :
 			this.formatType === 'stadium' ? `gen${gen}stadium${gen > 1 ? gen : ''}` :
 			`gen${gen}`;
@@ -966,8 +963,8 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 			table = table['gen7letsgo'];
 		} else if (this.formatType === 'natdex') {
 			table = table['gen' + dex.gen + 'natdex'];
-		} else if (this.dex.modid.includes('pokemonnext')) {
-			table = table[this.dex.modid];
+		} else if (this.formatType === 'pokemonnext') {
+			table = table['gen9pokemonnext'];
 		} else if (this.formatType === 'metronome') {
 			table = table['gen' + dex.gen + 'metronome'];
 		} else if (this.formatType === 'nfe') {
@@ -1241,7 +1238,7 @@ class BattleItemSearch extends BattleTypedSearch<'item'> {
 		let table = BattleTeambuilderTable;
 		if (this.formatType?.startsWith('bdsp')) {
 			table = table['gen8bdsp'];
-		} else if (this.dex.modid.includes('pokemonnext')) {
+		} else if (this.formatType === 'pokemonnext') {
 			table = table[this.dex.modid];
 		} else if (this.formatType === 'natdex') {
 			table = table['gen' + this.dex.gen + 'natdex'];
